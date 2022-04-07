@@ -1,6 +1,5 @@
 import Phaser from 'phaser';
 
-
 const config = {
     type: Phaser.AUTO,
     width: 800,
@@ -21,8 +20,9 @@ const config = {
 new Phaser.Game(config);
 
 let bird = null;
-let pipe = null;
-let totalDelta = null;
+let topPipe;
+let bottomPipe;
+
 let VELOCITY = 400;
 
 const initialBirdPosition = {
@@ -30,30 +30,28 @@ const initialBirdPosition = {
     y : config.height / 2
 }
 
-//called 1st, loading assets, images, music, animations, etc
-// you have context to this object that contains a lot of methods
+let pipeVerticalDistanceRange = [100, 200];
+const pipeVerticalDistance = Phaser.Math.Between(...pipeVerticalDistanceRange);
+
 function preload() {
     this.load.image('sky', 'assets/sky.png');
     this.load.image('bird', 'assets/bird.png');
     this.load.image('pipe', 'assets/pipe.png');
 }
 
-//called 2nd
 function create() {
     this.add.image(config.width / 2, config.height / 2, 'sky');
-    pipe = this.add.sprite(config.width/2.5, config.height, 'pipe');
+
     bird = this.physics.add.sprite(initialBirdPosition.x, initialBirdPosition.y, 'bird');
     bird.body.gravity.y = 600;
 
-    console.log(bird.body);
-    // input events for mouse
+    topPipe = this.physics.add.sprite(400, 100, 'pipe').setOrigin(0,1);
+    bottomPipe = this.physics.add.sprite(400, topPipe.y + pipeVerticalDistance, 'pipe').setOrigin(0,0);
+    // input events
     this.input.on('pointerdown', flap)
-
     this.input.keyboard.on('keydown_SPACE', flap);
 }
 
-// 60fps
-// 60 times per second 
 function update(time, delta) {
     gameOver();
 }
