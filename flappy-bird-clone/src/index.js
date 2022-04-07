@@ -22,7 +22,6 @@ new Phaser.Game(config);
 let bird = null;
 let pipes = null;
 
-let horizontalDistance = 0;
 let isGameOver = false;
 
 let VELOCITY = 350;
@@ -67,6 +66,8 @@ function create() {
 
 function update(time, delta) {
     gameOver();
+
+    recyclePipes();
 }
 
 function flap () {
@@ -102,6 +103,22 @@ function placePipe(uPipe, lPipe) {
     lPipe.x = uPipe.x;
     lPipe.y = uPipe.y + pipeVerticalDistance;
 
+}
+
+function recyclePipes() {
+    let tempPipes = [];
+    // checkeamos la posición de la pipe al moverse
+    // en el momento que el valor del x sea menor a 0, reutilizamos esa pipe
+    pipes.getChildren().forEach(pipe => {
+        if (pipe.getBounds().right < 0) {
+            //recycle this pipe
+            // get here upper and lower pipe that are out of the bound
+            tempPipes.push(pipe);
+            if (tempPipes.length === 2) {
+                placePipe(...tempPipes);
+            }
+        }
+    });
 }
 
 function getRightMostPipe() {
