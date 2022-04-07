@@ -57,6 +57,8 @@ function create() {
         placePipe(upperPipe, lowerPipe);
     }
 
+    pipes.setVelocityX(-200);
+
     // input events
     this.input.on('pointerdown', flap)
     this.input.keyboard.on('keydown_SPACE', flap);
@@ -96,9 +98,6 @@ function placePipe(uPipe, lPipe) {
 
     lPipe.x = uPipe.x;
     lPipe.y = uPipe.y + pipeVerticalDistance;
-
-    uPipe.body.velocity.x = -200;
-    lPipe.body.velocity.x = -200;
 
     xDistance += 400;
 }
