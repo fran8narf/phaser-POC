@@ -1,4 +1,4 @@
-import Phaser from 'phaser';
+import Phaser, { UP } from 'phaser';
 
 const config = {
     type: Phaser.AUTO,
@@ -20,18 +20,21 @@ const config = {
 new Phaser.Game(config);
 
 let bird = null;
-let topPipe;
-let bottomPipe;
+let pipes = null;
 
-let VELOCITY = 400;
+let xDistance = 400;
+let isGameOver = false;
+
+let VELOCITY = 350;
 
 const initialBirdPosition = {
     x : config.width / 10,
     y : config.height / 2
 }
+const PIPES_TO_RENDER = 5;
 
 let pipeVerticalDistanceRange = [100, 200];
-const pipeVerticalDistance = Phaser.Math.Between(...pipeVerticalDistanceRange);
+
 
 function preload() {
     this.load.image('sky', 'assets/sky.png');
@@ -43,10 +46,17 @@ function create() {
     this.add.image(config.width / 2, config.height / 2, 'sky');
 
     bird = this.physics.add.sprite(initialBirdPosition.x, initialBirdPosition.y, 'bird');
-    bird.body.gravity.y = 600;
+    bird.body.gravity.y = 700;
 
-    topPipe = this.physics.add.sprite(400, 100, 'pipe').setOrigin(0,1);
-    bottomPipe = this.physics.add.sprite(400, topPipe.y + pipeVerticalDistance, 'pipe').setOrigin(0,0);
+    pipes = this.physics.add.group();
+
+    for (let i = 0; i < PIPES_TO_RENDER; i++) {
+        const upperPipe = pipes.create(0, 0, 'pipe').setOrigin(0,1);
+        const lowerPipe = pipes.create(0, 0, 'pipe').setOrigin(0,0);
+
+        placePipe(upperPipe, lowerPipe);
+    }
+
     // input events
     this.input.on('pointerdown', flap)
     this.input.keyboard.on('keydown_SPACE', flap);
@@ -66,6 +76,7 @@ function gameOver () {
         bird.body.gravity.y = 0;
         
         console.log('game over');
+        isGameOver = true;
         restartPlayerPosition();
     }
 }
@@ -74,4 +85,20 @@ function restartPlayerPosition() {
     bird.body.position.x = initialBirdPosition.x;
     bird.body.position.y = initialBirdPosition.y;
     bird.body.velocity.y = 0;
+}
+
+function placePipe(uPipe, lPipe) {
+    const pipeVerticalDistance = Phaser.Math.Between(...pipeVerticalDistanceRange);
+    let pipeVerticalPos = Phaser.Math.Between(0 + 30, config.height - 30 - pipeVerticalDistance);
+
+    uPipe.x = xDistance;
+    uPipe.y = pipeVerticalPos;
+
+    lPipe.x = uPipe.x;
+    lPipe.y = uPipe.y + pipeVerticalDistance;
+
+    uPipe.body.velocity.x = -200;
+    lPipe.body.velocity.x = -200;
+
+    xDistance += 400;
 }
