@@ -23,6 +23,7 @@ new Phaser.Game(config);
 
 let bird = null;
 let totalDelta = null;
+let VELOCITY = 400;
 
 //called 1st, loading assets, images, music, animations, etc
 // you have context to this object that contains a lot of methods
@@ -31,7 +32,6 @@ function preload() {
     this.load.image('bird', 'assets/bird.png');
 }
 
-let VELOCITY = 400;
 //called 2nd
 function create() {
     this.add.image(config.width / 2, config.height / 2, 'sky');
@@ -47,8 +47,18 @@ function create() {
 // 60fps
 // 60 times per second 
 function update(time, delta) {
+    gameOver();
 }
 
 function flap () {
     bird.body.velocity.y = -VELOCITY;
+}
+
+function gameOver () {
+    if (bird.body.position.y >= config.height-bird.body.gameObject.height || bird.body.position.y <= 0) {
+        bird.body.velocity.y = 0;
+        bird.body.gravity.y = 0;
+        
+        console.log('game over');
+    }
 }
