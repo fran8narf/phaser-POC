@@ -102,6 +102,14 @@ class PlayScene extends Phaser.Scene{
             // this.restartPlayerPosition();
             this.physics.pause();
             this.luffy.setTint(0xff0000);
+
+            this.time.addEvent({
+                delay: 1000,
+                callback: () => {
+                    
+                },
+                loop: false
+            })
         }
     }
 
