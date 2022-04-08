@@ -26,8 +26,8 @@ const config = {
         }
     },
     scene: [
-        new PlayScene(SHARED_CONFIG),
-        new MenuScene(SHARED_CONFIG)
+        new MenuScene(SHARED_CONFIG),
+        new PlayScene(SHARED_CONFIG)
     ]
 }
 new Phaser.Game(config);

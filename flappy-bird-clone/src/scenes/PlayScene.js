@@ -43,7 +43,7 @@ class PlayScene extends Phaser.Scene {
         this.createScore();
         this.createPause();
 
-        this.jumpSound = this.sound.add('jump');
+        this.jumpSound = this.sound.add('jump', {volume: 0.3});
     }
 
     update(time, delta) {
