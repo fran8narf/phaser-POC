@@ -1,6 +1,6 @@
 import Phaser from "phaser";
 
-class PlayScene extends Phaser.Scene{
+class PlayScene extends Phaser.Scene {
     
     constructor(config) {
         super('PlayScene');
@@ -21,6 +21,7 @@ class PlayScene extends Phaser.Scene{
 
         this.bestScore = localStorage.getItem('bestScore') || 0;
         this.bestScoreText = '';
+        this.jumpSound = null;
     }
 
     preload() {
@@ -30,6 +31,7 @@ class PlayScene extends Phaser.Scene{
         this.load.image('l-pipe', 'assets/lower-laser-pipe.png');
 
         this.load.image('pause', 'assets/pause.png');
+        this.load.audio('jump', 'assets/jump-sound.wav');
     }
 
     create() {
@@ -40,6 +42,8 @@ class PlayScene extends Phaser.Scene{
         this.handleInputs();
         this.createScore();
         this.createPause();
+
+        this.jumpSound = this.sound.add('jump');
     }
 
     update(time, delta) {
@@ -137,6 +141,7 @@ class PlayScene extends Phaser.Scene{
      */
     flap () {
         this.luffy.body.velocity.y = -this.VELOCITY;
+        this.jumpSound.play();
     }
     
     increaseScore() {
