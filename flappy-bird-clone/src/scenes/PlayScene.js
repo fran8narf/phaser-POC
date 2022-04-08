@@ -46,6 +46,8 @@ class PlayScene extends Phaser.Scene{
         this.luffy = this.physics.add.sprite(this.config.startPosition.x, this.config.startPosition.y, 'luffy');
         this.luffy.body.gravity.y = 700;
         this.luffy.scale = 0.15;
+
+        this.luffy.setCollideWorldBounds(true);
     }
 
     renderPipes() {
@@ -91,7 +93,7 @@ class PlayScene extends Phaser.Scene{
      */
     gameOver (isGameOver = false) {
         if (
-            this.luffy.y > this.config.height || this.luffy.y < -this.luffy.height || isGameOver
+            this.luffy.getBounds().bottom >= this.config.height || this.luffy.getBounds().top <= 0 || isGameOver
         ) {
             this.luffy.body.velocity.y = 0;
             this.luffy.body.gravity.y = 0;
