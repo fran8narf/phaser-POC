@@ -123,7 +123,9 @@ class PlayScene extends Phaser.Scene{
     increaseScore() {
         this.score+= 1;
         this.scoreText.setText(`Score: ${this.score}`);
+    }
 
+    setBestScore() {
         if (this.score > this.bestScore) {
             this.bestScore = this.score;
             localStorage.setItem('bestScore', this.bestScore);
@@ -148,6 +150,7 @@ class PlayScene extends Phaser.Scene{
             this.time.addEvent({
                 delay: 1000,
                 callback: () => {
+                    this.setBestScore();
                     this.scene.restart();
                 },
                 loop: false
