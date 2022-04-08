@@ -4,7 +4,7 @@ import PlayScene from './scenes/PlayScene';
 const WIDTH = 800;
 const HEIGHT = 600;
 const BIRD_POSITION = {
-    x: WIDTH / 2,
+    x: WIDTH / 10,
     y: HEIGHT / 2
 };
 
