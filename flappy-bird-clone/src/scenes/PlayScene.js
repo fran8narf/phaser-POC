@@ -1,12 +1,10 @@
-import Phaser from "phaser";
+import BaseScene from "./BaseScene";
 
-class PlayScene extends Phaser.Scene {
+class PlayScene extends BaseScene {
     
     constructor(config) {
         super('PlayScene');
 
-        //le damos scope global a config
-        this.config = config;
         this.luffy = null;
         this.pipes = null;
 
@@ -25,7 +23,7 @@ class PlayScene extends Phaser.Scene {
     }
 
     create() {
-        this.renderBg();
+        super.create();
         this.renderPlayer();
         this.renderPipes();
         this.createColliders();
