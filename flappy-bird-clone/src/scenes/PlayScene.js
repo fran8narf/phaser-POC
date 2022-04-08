@@ -103,22 +103,6 @@ class PlayScene extends Phaser.Scene{
     }
 
     /**
-     * Restarts players position when the game is over
-     */
-    /* restartPlayerPosition() {
-        this.luffy.body.position.x = this.config.startPosition.x;
-        this.luffy.body.position.y = this.config.startPosition.y;
-        this.luffy.body.velocity.y = 0;
-        this.restartPipes();
-    } */
-
-    /* restartPipes() {
-        this.pipes.getChildren().forEach(pipe => {
-            pipe.setVelocityX(0);
-        });
-    } */
-
-    /**
      * Place both upper and lower pipe randomly determined by the pipeVerticalDistanceRange and the pipeHorizontalDistanceRange
      */
     placePipe(uPipe, lPipe) {
