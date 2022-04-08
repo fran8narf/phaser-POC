@@ -13,8 +13,8 @@ class PlayScene extends Phaser.Scene{
         this.VELOCITY = 350;
         this.PIPES_TO_RENDER = 5;
 
-        this.pipeVerticalDistanceRange = [100, 200];
-        this.pipeHorizontalDistanceRange = [350, 400];
+        this.pipeVerticalDistanceRange = [170, 220];
+        this.pipeHorizontalDistanceRange = [320, 370];
     }
 
     preload() {
@@ -99,6 +99,7 @@ class PlayScene extends Phaser.Scene{
             console.log('game over');
             // this.restartPlayerPosition();
             this.physics.pause();
+            this.luffy.setTint(0xff0000);
         }
     }
 
