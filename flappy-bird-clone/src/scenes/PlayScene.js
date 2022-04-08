@@ -3,7 +3,7 @@ import BaseScene from "./BaseScene";
 class PlayScene extends BaseScene {
     
     constructor(config) {
-        super('PlayScene');
+        super('PlayScene', config);
 
         this.luffy = null;
         this.pipes = null;
@@ -31,7 +31,7 @@ class PlayScene extends BaseScene {
         this.createScore();
         this.createPause();
 
-        this.jumpSound = this.sound.add('jump', {volume: 0.3});
+        this.jumpSound = this.sound.add('jump', {volume: 0.15});
     }
 
     update(time, delta) {

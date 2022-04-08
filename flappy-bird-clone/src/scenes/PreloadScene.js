@@ -2,7 +2,7 @@ import Phaser from "phaser";
 
 class PreloadScene extends Phaser.Scene {
     constructor(config) {
-        super('PreloadScene');
+        super('PreloadScene', config);
 
         this.config = config;
     }
