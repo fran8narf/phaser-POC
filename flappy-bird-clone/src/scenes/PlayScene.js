@@ -2,12 +2,11 @@ import Phaser from "phaser";
 
 class PlayScene extends Phaser.Scene{
     
-    constructor() {
+    constructor(config) {
         super('PlayScene');
-        this.initialBirdPosition = {
-            x : 80,
-            y : 300
-        },
+
+        //le damos scope global a config
+        this.config = config;
         this.bird = null;
     }
 
@@ -20,7 +19,7 @@ class PlayScene extends Phaser.Scene{
     create() {
         this.add.image(0, 0, 'sky').setOrigin(0,0);
 
-        this.bird = this.physics.add.sprite(this.initialBirdPosition.x, this.initialBirdPosition.y, 'bird');
+        this.bird = this.physics.add.sprite(this.config.startPosition.x, this.config.startPosition.y, 'bird');
         this.bird.body.gravity.y = 700;
         this.bird.scale = 0.3;
     }
