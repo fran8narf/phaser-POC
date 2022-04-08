@@ -18,6 +18,9 @@ class PlayScene extends Phaser.Scene{
 
         this.score = 0;
         this.scoreText = '';
+
+        this.bestScore = 0;
+        this.bestScoreText = '';
     }
 
     preload() {
@@ -48,7 +51,7 @@ class PlayScene extends Phaser.Scene{
 
     renderPlayer(){
         this.luffy = this.physics.add.sprite(this.config.startPosition.x, this.config.startPosition.y, 'luffy');
-        this.luffy.body.gravity.y = 700;
+        this.luffy.body.gravity.y = 900;
         this.luffy.scale = 0.15;
 
         this.luffy.setCollideWorldBounds(true);
@@ -88,6 +91,8 @@ class PlayScene extends Phaser.Scene{
     createScore() {
         this.score = 0;
         this.scoreText = this.add.text(16, 16, `Score : ${this.score}`, this.setTextStyles());
+
+        this.bestScoreText = this.add.text(630, 16, `Best : ${this.bestScore}`, this.setTextStyles());
     }
 
     setTextStyles(){
@@ -104,6 +109,16 @@ class PlayScene extends Phaser.Scene{
      */
     flap () {
         this.luffy.body.velocity.y = -this.VELOCITY;
+    }
+    
+    increaseScore() {
+        this.score+= 1;
+        this.scoreText.setText(`Score: ${this.score}`);
+
+        if (this.score > this.bestScore) {
+            this.bestScore = this.score;
+            this.bestScoreText.setText(`Best: ${this.bestScore}`);
+        }
     }
 
     /**
@@ -167,6 +182,7 @@ class PlayScene extends Phaser.Scene{
                 tempPipes.push(pipe);
                 if (tempPipes.length === 2) {
                     this.placePipe(...tempPipes);
+                    this.increaseScore();
                 }
             }
         });
