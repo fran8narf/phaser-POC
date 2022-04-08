@@ -97,25 +97,26 @@ class PlayScene extends Phaser.Scene{
             this.luffy.body.gravity.y = 0;
             
             console.log('game over');
-            this.restartPlayerPosition();
+            // this.restartPlayerPosition();
+            this.physics.pause();
         }
     }
 
     /**
      * Restarts players position when the game is over
      */
-    restartPlayerPosition() {
+    /* restartPlayerPosition() {
         this.luffy.body.position.x = this.config.startPosition.x;
         this.luffy.body.position.y = this.config.startPosition.y;
         this.luffy.body.velocity.y = 0;
         this.restartPipes();
-    }
+    } */
 
-    restartPipes() {
+    /* restartPipes() {
         this.pipes.getChildren().forEach(pipe => {
             pipe.setVelocityX(0);
         });
-    }
+    } */
 
     /**
      * Place both upper and lower pipe randomly determined by the pipeVerticalDistanceRange and the pipeHorizontalDistanceRange
