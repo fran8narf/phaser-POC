@@ -15,6 +15,9 @@ class PlayScene extends Phaser.Scene{
 
         this.pipeVerticalDistanceRange = [170, 220];
         this.pipeHorizontalDistanceRange = [320, 370];
+
+        this.score = 0;
+        this.scoreText = '';
     }
 
     preload() {
@@ -30,6 +33,7 @@ class PlayScene extends Phaser.Scene{
         this.renderPipes();
         this.createColliders();
         this.handleInputs();
+        this.createScore();
     }
 
     update(time, delta) {
@@ -81,6 +85,20 @@ class PlayScene extends Phaser.Scene{
         this.input.keyboard.on('keydown_SPACE', this.flap, this);
     }
 
+    createScore() {
+        this.score = 0;
+        this.scoreText = this.add.text(16, 16, `Score : ${this.score}`, this.setTextStyles());
+    }
+
+    setTextStyles(){
+        return {
+            fontSize: '32px', 
+            fill: '#000', 
+            fontWeight: 'bolder', 
+            backgroundColor: 'rgba(255, 232, 0, .7)'
+        }
+    }
+
     /**
      * Flap movement fn
      */
@@ -99,14 +117,13 @@ class PlayScene extends Phaser.Scene{
             this.luffy.body.gravity.y = 0;
             
             console.log('game over');
-            // this.restartPlayerPosition();
             this.physics.pause();
             this.luffy.setTint(0xff0000);
 
             this.time.addEvent({
                 delay: 1000,
                 callback: () => {
-                    
+                    this.scene.restart();
                 },
                 loop: false
             })
