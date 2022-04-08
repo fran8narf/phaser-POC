@@ -21,7 +21,8 @@ class PlayScene extends Phaser.Scene{
     preload() {
         this.load.image('sky', 'assets/wano-bg.jpg');
         this.load.image('bird', 'assets/luffy-png-removebg-preview.png');
-        this.load.image('pipe', 'assets/pipe.png');
+        this.load.image('u-pipe', 'assets/upper-laser-pipe.png');
+        this.load.image('l-pipe', 'assets/lower-laser-pipe.png');
     }
 
     create() {
@@ -34,8 +35,8 @@ class PlayScene extends Phaser.Scene{
         this.pipes = this.physics.add.group();
 
         for (let i = 0; i < PIPES_TO_RENDER; i++) {
-            const upperPipe = this.pipes.create(0, 0, 'pipe').setOrigin(0,1);
-            const lowerPipe = this.pipes.create(0, 0, 'pipe').setOrigin(0,0);
+            const upperPipe = this.pipes.create(0, 0, 'u-pipe').setOrigin(0,1);
+            const lowerPipe = this.pipes.create(0, 0, 'l-pipe').setOrigin(0,0);
 
             this.placePipe(upperPipe, lowerPipe);
         }
