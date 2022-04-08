@@ -15,6 +15,8 @@ class MenuScene extends BaseScene {
         super.create();
         this.cameras.main.fadeIn(2500, 255, 255, 255)
         // this.scene.start('PlayScene');
+
+        this.menuRender(this.menu);
     }
     update() {}
 }

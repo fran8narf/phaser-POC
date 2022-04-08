@@ -4,7 +4,7 @@ class BaseScene extends Phaser.Scene {
     constructor(key, config) {
         super(key);
         this.config = config;
-
+        this.screenCenter = [config.width / 2, config.height / 2];
         /* this.bgSound = null;
         this.screenCenter = null; */
     }
@@ -19,6 +19,14 @@ class BaseScene extends Phaser.Scene {
 
     startGame() {
         this.scene.start('PlayScene');
+    }
+
+    menuRender(menu) {
+        menu.forEach(element => {
+            console.log(this.screenCenter);
+
+            // const menuPosition = []
+        });
     }
 }
 
