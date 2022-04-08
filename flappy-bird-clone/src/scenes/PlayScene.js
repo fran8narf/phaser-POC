@@ -24,16 +24,6 @@ class PlayScene extends Phaser.Scene {
         this.jumpSound = null;
     }
 
-    preload() {
-        this.load.image('bg', 'assets/wano-bg.jpg');
-        this.load.image('luffy', 'assets/luffy-png-removebg-preview.png');
-        this.load.image('u-pipe', 'assets/upper-laser-pipe.png');
-        this.load.image('l-pipe', 'assets/lower-laser-pipe.png');
-
-        this.load.image('pause', 'assets/pause.png');
-        this.load.audio('jump', 'assets/jump-sound.wav');
-    }
-
     create() {
         this.renderBg();
         this.renderPlayer();
