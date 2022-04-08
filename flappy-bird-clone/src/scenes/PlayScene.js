@@ -31,7 +31,7 @@ class PlayScene extends BaseScene {
         this.createScore();
         this.createPause();
 
-        this.jumpSound = this.sound.add('jump', {volume: 0.15});
+        this.jumpSound = this.sound.add('jump', {volume: 0.3});
     }
 
     update(time, delta) {

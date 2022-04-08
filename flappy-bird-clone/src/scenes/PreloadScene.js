@@ -5,6 +5,9 @@ class PreloadScene extends Phaser.Scene {
         super('PreloadScene', config);
 
         this.config = config;
+
+        this.bgSound = null;
+        this.screenCenter = null;
     }
 
     preload() {
@@ -21,6 +24,10 @@ class PreloadScene extends Phaser.Scene {
     }
     create() {
         this.scene.start('MenuScene');
+
+        this.bgSound = this.sound.add('bg-sound', {volume: 0.3});
+        this.bgSound.loop = true;
+        // this.bgSound.play();
     }
     update() {}
 }
