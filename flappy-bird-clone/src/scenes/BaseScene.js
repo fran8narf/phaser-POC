@@ -22,10 +22,15 @@ class BaseScene extends Phaser.Scene {
     }
 
     menuRender(menu) {
+        let lastMenuPosY = 0;
         menu.forEach(element => {
-            console.log(this.screenCenter);
-
-            // const menuPosition = []
+            const menuPosition = [this.screenCenter[0], this.screenCenter[1] + lastMenuPosY];
+            this.add.text(...menuPosition, element.text, { 
+                fontSize: '42px', fill: '#000', 
+                backgroundColor: 'rgba(255, 255, 255, 0.8)'
+            })
+            .setOrigin(.5, 1);
+            lastMenuPosY += 50;
         });
     }
 }
