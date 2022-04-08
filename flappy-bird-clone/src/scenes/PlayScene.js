@@ -28,6 +28,8 @@ class PlayScene extends Phaser.Scene{
         this.load.image('luffy', 'assets/luffy-png-removebg-preview.png');
         this.load.image('u-pipe', 'assets/upper-laser-pipe.png');
         this.load.image('l-pipe', 'assets/lower-laser-pipe.png');
+
+        this.load.image('pause', 'assets/pause.png');
     }
 
     create() {
@@ -37,6 +39,7 @@ class PlayScene extends Phaser.Scene{
         this.createColliders();
         this.handleInputs();
         this.createScore();
+        this.createPause();
     }
 
     update(time, delta) {
@@ -47,6 +50,22 @@ class PlayScene extends Phaser.Scene{
 
     renderBg() {
         this.add.image(0, 0, 'bg').setOrigin(0,0);
+    }
+
+    createPause() {
+        const pauseBtn = this.add.image(this.config.width - 10, this.config.height - 10, 'pause')
+            .setOrigin(1)
+            .setScale(3)
+            .setInteractive();
+
+        pauseBtn.on('pointerdown', () => {
+            this.physics.pause();
+            this.scene.pause();
+        });
+
+        pauseBtn.on('keydown_P', () => {
+            this.scene.pause();
+        })
     }
 
     renderPlayer(){
