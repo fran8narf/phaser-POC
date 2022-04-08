@@ -19,7 +19,7 @@ class PlayScene extends Phaser.Scene{
         this.score = 0;
         this.scoreText = '';
 
-        this.bestScore = 0;
+        this.bestScore = localStorage.getItem('bestScore') || 0;
         this.bestScoreText = '';
     }
 
@@ -126,6 +126,7 @@ class PlayScene extends Phaser.Scene{
 
         if (this.score > this.bestScore) {
             this.bestScore = this.score;
+            localStorage.setItem('bestScore', this.bestScore);
             this.bestScoreText.setText(`Best: ${this.bestScore}`);
         }
     }
