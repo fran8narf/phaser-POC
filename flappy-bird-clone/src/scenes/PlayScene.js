@@ -14,7 +14,7 @@ class PlayScene extends Phaser.Scene{
         this.PIPES_TO_RENDER = 5;
 
         this.pipeVerticalDistanceRange = [170, 220];
-        this.pipeHorizontalDistanceRange = [320, 370];
+        this.pipeHorizontalDistanceRange = [350, 390];
 
         this.score = 0;
         this.scoreText = '';
@@ -51,8 +51,8 @@ class PlayScene extends Phaser.Scene{
 
     renderPlayer(){
         this.luffy = this.physics.add.sprite(this.config.startPosition.x, this.config.startPosition.y, 'luffy');
-        this.luffy.body.gravity.y = 900;
-        this.luffy.scale = 0.15;
+        this.luffy.body.gravity.y = 1100;
+        this.luffy.scale = 0.3;
 
         this.luffy.setCollideWorldBounds(true);
     }
@@ -71,7 +71,7 @@ class PlayScene extends Phaser.Scene{
             this.placePipe(upperPipe, lowerPipe);
         }
 
-        this.pipes.setVelocityX(-200);
+        this.pipes.setVelocityX(-300);
     }
 
     createColliders() {
@@ -90,14 +90,23 @@ class PlayScene extends Phaser.Scene{
 
     createScore() {
         this.score = 0;
-        this.scoreText = this.add.text(16, 16, `Score : ${this.score}`, this.setTextStyles());
+        this.scoreText = this.add.text(16, 16, `Score : ${this.score}`, this.setTextScoreStyles());
 
-        this.bestScoreText = this.add.text(630, 16, `Best : ${this.bestScore}`, this.setTextStyles());
+        this.bestScoreText = this.add.text(16, 64, `Best : ${this.bestScore}`, this.setTextBestScoreStyles());
     }
 
-    setTextStyles(){
+    setTextScoreStyles(){
         return {
             fontSize: '32px', 
+            fill: '#000', 
+            fontWeight: 'bolder', 
+            backgroundColor: 'rgba(255, 232, 0, .7)'
+        }
+    }
+
+    setTextBestScoreStyles() {
+        return {
+            fontSize: '20px', 
             fill: '#000', 
             fontWeight: 'bolder', 
             backgroundColor: 'rgba(255, 232, 0, .7)'
