@@ -1,21 +1,17 @@
-import Phaser, { UP } from 'phaser';
+import Phaser from 'phaser';
+import PlayScene from './scenes/PlayScene';
 
 const config = {
     type: Phaser.AUTO,
     width: 800,
     height: 600,
     physics: {
-        // Arcade physics plugin
         default: 'arcade',
         arcade: {
             debug: true
         }
     },
-    scene: {
-        preload,
-        create,
-        update 
-    }
+    scene: [PlayScene]
 }
 new Phaser.Game(config);
 
@@ -37,16 +33,16 @@ const pipeHorizontalDistanceRange = [350, 400];
 
 
 function preload() {
-    this.load.image('sky', 'assets/sky.png');
+    /* this.load.image('sky', 'assets/sky.png');
     this.load.image('bird', 'assets/bird.png');
-    this.load.image('pipe', 'assets/pipe.png');
+    this.load.image('pipe', 'assets/pipe.png'); */
 }
 
 function create() {
-    this.add.image(config.width / 2, config.height / 2, 'sky');
+    /* this.add.image(config.width / 2, config.height / 2, 'sky');
 
     bird = this.physics.add.sprite(initialBirdPosition.x, initialBirdPosition.y, 'bird');
-    bird.body.gravity.y = 700;
+    bird.body.gravity.y = 700; */
 
     pipes = this.physics.add.group();
 
