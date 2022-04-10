@@ -46,15 +46,17 @@ class PlayScene extends BaseScene {
             .setInteractive();
 
         pauseBtn.on('pointerdown', () => {
-            this.isPaused = true;
-            this.physics.pause();
-            this.scene.pause();
-            this.scene.launch('PauseScene');
+            this.callPauseScene();
         });
 
-        pauseBtn.on('keydown_P', () => {
-            this.scene.pause();
-        })
+        this.input.keyboard.on('keydown_P', this.callPauseScene, this);
+    }
+
+    callPauseScene() {
+        this.isPaused = true;
+        this.physics.pause();
+        this.scene.pause();
+        this.scene.launch('PauseScene');
     }
 
     renderPlayer(){

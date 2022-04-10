@@ -17,6 +17,7 @@ class MenuScene extends BaseScene {
         // this.scene.start('PlayScene');
 
         this.menuRender(this.menu, this.setupMenuEvents.bind(this));
+    
     }
     update() {}
 
