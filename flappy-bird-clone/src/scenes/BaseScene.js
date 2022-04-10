@@ -33,6 +33,17 @@ class BaseScene extends Phaser.Scene {
         });
     }
 
+    createBackBtn() {
+        const backBtn = this.add.image(this.config.width - 50, 50, 'back-btn')
+            .setOrigin(0, 1)
+            .setScale(2)
+            .setInteractive();
+
+        backBtn.on('pointerdown', () => {
+            this.scene.start('MenuScene');
+        });
+    }
+
     /* muteSound(sound) {
         this.add.image(this.config.width - 70, 20, 'sound-off')
             .setOrigin(0, 0)

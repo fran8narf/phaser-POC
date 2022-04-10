@@ -41,7 +41,7 @@ class PlayScene extends BaseScene {
         this.recyclePipes();
     }
 
-    createBackBtn() {
+    /* createBackBtn() {
         const backBtn = this.add.image(this.config.width - 50, 50, 'back-btn')
             .setOrigin(0, 1)
             .setScale(2)
@@ -50,7 +50,7 @@ class PlayScene extends BaseScene {
         backBtn.on('pointerdown', () => {
             this.scene.start('MenuScene');
         });
-    }
+    } */
 
     createPause() {
         const pauseBtn = this.add.image(this.config.width - 10, this.config.height - 10, 'pause')

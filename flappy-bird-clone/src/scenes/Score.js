@@ -10,6 +10,7 @@ class ScoreScene extends BaseScene {
     create() {
         super.create();
         this.setBestScore();
+        this.createBackBtn();
     }
     update() {}
 
