@@ -20,17 +20,14 @@ class PlayScene extends BaseScene {
         this.bestScore = localStorage.getItem('bestScore') || 0;
         this.bestScoreText = '';
         this.jumpSound = null;
+
+        this.countDownText = '';
+        this.initialTime = 0;
+        this.timeOutEvent = undefined;
     }
 
     create() {
-        super.create();
-        this.renderPlayer();
-        this.renderPipes();
-        this.createColliders();
-        this.handleInputs();
-        this.createScore();
-        this.createPause();
-        this.createBackBtn();
+        this.initScene();
         
         this.jumpSound = this.sound.add('jump', {volume: 0.3});
     }
@@ -141,6 +138,48 @@ class PlayScene extends BaseScene {
             localStorage.setItem('bestScore', this.bestScore);
             this.bestScoreText.setText(`Best: ${this.bestScore}`);
         }
+    }
+
+    ListenToEvents() {
+        if (this.pauseEvent) { return; }
+        this.pauseEvent = this.events.on('resume', () => {
+            console.log('is this executing?');
+            this.initialTime = 3;
+            this.countDownText = this.add.text(
+                ...this.screenCenter,
+                `Continue in ${this.initialTime}`,
+                this.menuStyles
+            ).setOrigin(0.5);
+            this.timeOutEvent = this.time.addEvent({
+                delay : 1000,
+                callback : this.countDown,
+                callbackScope: this,
+                loop : true
+            });
+        });
+    }
+
+    countDown() {
+        this.initialTime--;
+        this.countDownText.setText(`Continue in ${this.initialTime}`);
+        if (this.initialTime <= 0) {
+            this.countDownText.setText('');
+            this.timeOutEvent.remove();
+            this.physics.resume();
+            this.scene.resume();
+        }
+    }
+
+    initScene() {
+        super.create();
+        this.renderPlayer();
+        this.renderPipes();
+        this.createColliders();
+        this.handleInputs();
+        this.createScore();
+        this.createPause();
+        this.createBackBtn();
+        this.ListenToEvents();
     }
 
     /**
