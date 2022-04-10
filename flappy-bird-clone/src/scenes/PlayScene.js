@@ -1,12 +1,10 @@
-import Phaser from "phaser";
+import BaseScene from "./BaseScene";
 
-class PlayScene extends Phaser.Scene{
+class PlayScene extends BaseScene {
     
     constructor(config) {
-        super('PlayScene');
+        super('PlayScene', config);
 
-        //le damos scope global a config
-        this.config = config;
         this.luffy = null;
         this.pipes = null;
 
@@ -14,22 +12,25 @@ class PlayScene extends Phaser.Scene{
         this.PIPES_TO_RENDER = 5;
 
         this.pipeVerticalDistanceRange = [170, 220];
-        this.pipeHorizontalDistanceRange = [320, 370];
-    }
+        this.pipeHorizontalDistanceRange = [350, 390];
 
-    preload() {
-        this.load.image('bg', 'assets/wano-bg.jpg');
-        this.load.image('luffy', 'assets/luffy-png-removebg-preview.png');
-        this.load.image('u-pipe', 'assets/upper-laser-pipe.png');
-        this.load.image('l-pipe', 'assets/lower-laser-pipe.png');
+        this.score = 0;
+        this.scoreText = '';
+
+        this.bestScore = localStorage.getItem('bestScore') || 0;
+        this.bestScoreText = '';
+        this.jumpSound = null;
+
+        this.countDownText = '';
+        this.initialTime = 0;
+        this.timeOutEvent = undefined;
+        this.isPaused = false;
     }
 
     create() {
-        this.renderBg();
-        this.renderPlayer();
-        this.renderPipes();
-        this.createColliders();
-        this.handleInputs();
+        this.initScene();
+        
+        this.jumpSound = this.sound.add('jump', {volume: 0.3});
     }
 
     update(time, delta) {
@@ -38,14 +39,30 @@ class PlayScene extends Phaser.Scene{
         this.recyclePipes();
     }
 
-    renderBg() {
-        this.add.image(0, 0, 'bg').setOrigin(0,0);
+    createPause() {
+        const pauseBtn = this.add.image(this.config.width - 10, this.config.height - 10, 'pause')
+            .setOrigin(1)
+            .setScale(3)
+            .setInteractive();
+
+        pauseBtn.on('pointerdown', () => {
+            this.callPauseScene();
+        });
+
+        this.input.keyboard.on('keydown_P', this.callPauseScene, this);
+    }
+
+    callPauseScene() {
+        this.isPaused = true;
+        this.physics.pause();
+        this.scene.pause();
+        this.scene.launch('PauseScene');
     }
 
     renderPlayer(){
         this.luffy = this.physics.add.sprite(this.config.startPosition.x, this.config.startPosition.y, 'luffy');
-        this.luffy.body.gravity.y = 700;
-        this.luffy.scale = 0.15;
+        this.luffy.body.gravity.y = 1100;
+        this.luffy.scale = 0.3;
 
         this.luffy.setCollideWorldBounds(true);
     }
@@ -64,7 +81,7 @@ class PlayScene extends Phaser.Scene{
             this.placePipe(upperPipe, lowerPipe);
         }
 
-        this.pipes.setVelocityX(-200);
+        this.pipes.setVelocityX(-300);
     }
 
     createColliders() {
@@ -81,11 +98,94 @@ class PlayScene extends Phaser.Scene{
         this.input.keyboard.on('keydown_SPACE', this.flap, this);
     }
 
+    createScore() {
+        this.score = 0;
+        this.scoreText = this.add.text(16, 16, `Score : ${this.score}`, this.setTextScoreStyles());
+
+        this.bestScoreText = this.add.text(16, 64, `Best : ${this.bestScore}`, this.setTextBestScoreStyles());
+    }
+
+    setTextScoreStyles(){
+        return {
+            fontSize: '32px', 
+            fill: '#000', 
+            fontWeight: 'bolder', 
+            backgroundColor: 'rgba(255, 232, 0, .7)'
+        }
+    }
+
+    setTextBestScoreStyles() {
+        return {
+            fontSize: '20px', 
+            fill: '#000', 
+            fontWeight: 'bolder', 
+            backgroundColor: 'rgba(255, 232, 0, .7)'
+        }
+    }
+
     /**
      * Flap movement fn
      */
     flap () {
+        if (this.isPaused) { return; }
         this.luffy.body.velocity.y = -this.VELOCITY;
+        this.jumpSound.play();
+    }
+    
+    increaseScore() {
+        this.score+= 1;
+        this.scoreText.setText(`Score: ${this.score}`);
+    }
+
+    setBestScore() {
+        if (this.score > this.bestScore) {
+            this.bestScore = this.score;
+            localStorage.setItem('bestScore', this.bestScore);
+            this.bestScoreText.setText(`Best: ${this.bestScore}`);
+        }
+    }
+
+    ListenToEvents() {
+        if (this.pauseEvent) { return; }
+        this.pauseEvent = this.events.on('resume', () => {
+            console.log('is this executing?');
+            this.initialTime = 3;
+            this.countDownText = this.add.text(
+                ...this.screenCenter,
+                `Continue in ${this.initialTime}`,
+                this.menuStyles
+            ).setOrigin(0.5);
+            this.timeOutEvent = this.time.addEvent({
+                delay : 1000,
+                callback : this.countDown,
+                callbackScope: this,
+                loop : true
+            });
+        });
+    }
+
+    countDown() {
+        this.initialTime--;
+        this.countDownText.setText(`Continue in ${this.initialTime}`);
+        if (this.initialTime <= 0) {
+            this.countDownText.setText('');
+            this.timeOutEvent.remove();
+            this.physics.resume();
+            this.scene.resume();
+            this.isPaused = false;
+        }
+    }
+
+    initScene() {
+        super.create();
+        this.renderPlayer();
+        this.renderPipes();
+        this.createColliders();
+        this.handleInputs();
+        this.createScore();
+        this.createPause();
+        this.createBackBtn();
+        this.ListenToEvents();
     }
 
     /**
@@ -97,11 +197,20 @@ class PlayScene extends Phaser.Scene{
         ) {
             this.luffy.body.velocity.y = 0;
             this.luffy.body.gravity.y = 0;
+            this.jumpSound = undefined;
             
             console.log('game over');
-            // this.restartPlayerPosition();
             this.physics.pause();
             this.luffy.setTint(0xff0000);
+
+            this.time.addEvent({
+                delay: 1000,
+                callback: () => {
+                    this.setBestScore();
+                    this.scene.restart();
+                },
+                loop: false
+            })
         }
     }
 
@@ -142,6 +251,7 @@ class PlayScene extends Phaser.Scene{
                 tempPipes.push(pipe);
                 if (tempPipes.length === 2) {
                     this.placePipe(...tempPipes);
+                    this.increaseScore();
                 }
             }
         });
