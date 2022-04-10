@@ -24,6 +24,7 @@ class PlayScene extends BaseScene {
         this.countDownText = '';
         this.initialTime = 0;
         this.timeOutEvent = undefined;
+        this.isPaused = false;
     }
 
     create() {
@@ -45,6 +46,7 @@ class PlayScene extends BaseScene {
             .setInteractive();
 
         pauseBtn.on('pointerdown', () => {
+            this.isPaused = true;
             this.physics.pause();
             this.scene.pause();
             this.scene.launch('PauseScene');
@@ -123,6 +125,7 @@ class PlayScene extends BaseScene {
      * Flap movement fn
      */
     flap () {
+        if (this.isPaused) { return; }
         this.luffy.body.velocity.y = -this.VELOCITY;
         this.jumpSound.play();
     }
@@ -167,6 +170,7 @@ class PlayScene extends BaseScene {
             this.timeOutEvent.remove();
             this.physics.resume();
             this.scene.resume();
+            this.isPaused = false;
         }
     }
 
