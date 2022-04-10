@@ -1,0 +1,29 @@
+import BaseScene from "./BaseScene";
+
+class ScoreScene extends BaseScene {
+    constructor(config) {
+        super('ScoreScene', config);
+        this.screenCenter = [config.width / 2, config.height / 2];
+    }
+
+    preload() {}
+    create() {
+        super.create();
+        this.setBestScore();
+    }
+    update() {}
+
+    setBestScore() {
+        const bestScore = localStorage.getItem('bestScore') || 0;
+        console.log(this.config);
+        const bestScoreText = this.add.text(
+            ...this.screenCenter, `Best Score: ${bestScore}`,
+            { 
+                fontSize: '62px', fill: '#FFF', 
+                backgroundColor: 'rgba(0, 0, 0, 0.7)'
+            },
+        ).setOrigin(.5, 1);
+    }
+}
+
+export default ScoreScene;

@@ -30,7 +30,18 @@ class PlayScene extends BaseScene {
         this.handleInputs();
         this.createScore();
         this.createPause();
+        this.createBackBtn();
+        
+        this.jumpSound = this.sound.add('jump', {volume: 0.3});
+    }
 
+    update(time, delta) {
+        this.gameOver();
+    
+        this.recyclePipes();
+    }
+
+    createBackBtn() {
         const backBtn = this.add.image(this.config.width - 50, 50, 'back-btn')
             .setOrigin(0, 1)
             .setScale(2)
@@ -39,13 +50,6 @@ class PlayScene extends BaseScene {
         backBtn.on('pointerdown', () => {
             this.scene.start('MenuScene');
         });
-        this.jumpSound = this.sound.add('jump', {volume: 0.3});
-    }
-
-    update(time, delta) {
-        this.gameOver();
-    
-        this.recyclePipes();
     }
 
     createPause() {
@@ -158,7 +162,7 @@ class PlayScene extends BaseScene {
         ) {
             this.luffy.body.velocity.y = 0;
             this.luffy.body.gravity.y = 0;
-            this.jumpSound = null;
+            this.jumpSound = undefined;
             
             console.log('game over');
             this.physics.pause();

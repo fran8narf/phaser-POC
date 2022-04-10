@@ -6,7 +6,7 @@ class MenuScene extends BaseScene {
 
         this.menu = [
             { scene: 'PlayScene', text : 'Play' },
-            { scene: 'Score', text : 'Scoreboard'},
+            { scene: 'ScoreScene', text : 'Scoreboard'},
             { scene: null, text : 'Exit '}
         ]
     }
@@ -33,7 +33,7 @@ class MenuScene extends BaseScene {
             textGameObject.setStyle({ fill: '#FFF' });
         });
 
-        textGameObject.on('pointerdown', () => {
+        textGameObject.on('pointerup', () => {
             console.log(menuItem.scene);
             if (menuItem.scene) {
                 this.scene.start(menuItem.scene);
