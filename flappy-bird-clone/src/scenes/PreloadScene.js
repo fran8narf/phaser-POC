@@ -10,7 +10,11 @@ class PreloadScene extends BaseScene {
 
     preload() {
         this.load.image('bg', 'assets/wano-bg.jpg');
-        this.load.image('luffy', 'assets/luffy-png-removebg-preview.png');
+        // this.load.image('luffy', 'assets/luffy-png-removebg-preview.png');
+        this.load.spritesheet('luffy', 'assets/luffy-sprite.png', {
+            frameWidth: 53,
+            frameHeight: 96
+        });
         this.load.image('u-pipe', 'assets/upper-laser-pipe.png');
         this.load.image('l-pipe', 'assets/lower-laser-pipe.png');
 
