@@ -1,12 +1,10 @@
-import Phaser from "phaser";
+import BaseScene from "./BaseScene";
 
-class PlayScene extends Phaser.Scene{
+class PlayScene extends BaseScene {
     
     constructor(config) {
-        super('PlayScene');
+        super('PlayScene', config);
 
-        //le damos scope global a config
-        this.config = config;
         this.luffy = null;
         this.pipes = null;
 
@@ -21,35 +19,24 @@ class PlayScene extends Phaser.Scene{
 
         this.bestScore = localStorage.getItem('bestScore') || 0;
         this.bestScoreText = '';
-    }
+        this.jumpSound = null;
 
-    preload() {
-        this.load.image('bg', 'assets/wano-bg.jpg');
-        this.load.image('luffy', 'assets/luffy-png-removebg-preview.png');
-        this.load.image('u-pipe', 'assets/upper-laser-pipe.png');
-        this.load.image('l-pipe', 'assets/lower-laser-pipe.png');
-
-        this.load.image('pause', 'assets/pause.png');
+        this.countDownText = '';
+        this.initialTime = 0;
+        this.timeOutEvent = undefined;
+        this.isPaused = false;
     }
 
     create() {
-        this.renderBg();
-        this.renderPlayer();
-        this.renderPipes();
-        this.createColliders();
-        this.handleInputs();
-        this.createScore();
-        this.createPause();
+        this.initScene();
+        
+        this.jumpSound = this.sound.add('jump', {volume: 0.3});
     }
 
     update(time, delta) {
         this.gameOver();
     
         this.recyclePipes();
-    }
-
-    renderBg() {
-        this.add.image(0, 0, 'bg').setOrigin(0,0);
     }
 
     createPause() {
@@ -59,13 +46,17 @@ class PlayScene extends Phaser.Scene{
             .setInteractive();
 
         pauseBtn.on('pointerdown', () => {
-            this.physics.pause();
-            this.scene.pause();
+            this.callPauseScene();
         });
 
-        pauseBtn.on('keydown_P', () => {
-            this.scene.pause();
-        })
+        this.input.keyboard.on('keydown_P', this.callPauseScene, this);
+    }
+
+    callPauseScene() {
+        this.isPaused = true;
+        this.physics.pause();
+        this.scene.pause();
+        this.scene.launch('PauseScene');
     }
 
     renderPlayer(){
@@ -136,7 +127,9 @@ class PlayScene extends Phaser.Scene{
      * Flap movement fn
      */
     flap () {
+        if (this.isPaused) { return; }
         this.luffy.body.velocity.y = -this.VELOCITY;
+        this.jumpSound.play();
     }
     
     increaseScore() {
@@ -152,6 +145,49 @@ class PlayScene extends Phaser.Scene{
         }
     }
 
+    ListenToEvents() {
+        if (this.pauseEvent) { return; }
+        this.pauseEvent = this.events.on('resume', () => {
+            console.log('is this executing?');
+            this.initialTime = 3;
+            this.countDownText = this.add.text(
+                ...this.screenCenter,
+                `Continue in ${this.initialTime}`,
+                this.menuStyles
+            ).setOrigin(0.5);
+            this.timeOutEvent = this.time.addEvent({
+                delay : 1000,
+                callback : this.countDown,
+                callbackScope: this,
+                loop : true
+            });
+        });
+    }
+
+    countDown() {
+        this.initialTime--;
+        this.countDownText.setText(`Continue in ${this.initialTime}`);
+        if (this.initialTime <= 0) {
+            this.countDownText.setText('');
+            this.timeOutEvent.remove();
+            this.physics.resume();
+            this.scene.resume();
+            this.isPaused = false;
+        }
+    }
+
+    initScene() {
+        super.create();
+        this.renderPlayer();
+        this.renderPipes();
+        this.createColliders();
+        this.handleInputs();
+        this.createScore();
+        this.createPause();
+        this.createBackBtn();
+        this.ListenToEvents();
+    }
+
     /**
      * Determines when the game is over and calls for restart
      */
@@ -161,6 +197,7 @@ class PlayScene extends Phaser.Scene{
         ) {
             this.luffy.body.velocity.y = 0;
             this.luffy.body.gravity.y = 0;
+            this.jumpSound = undefined;
             
             console.log('game over');
             this.physics.pause();
