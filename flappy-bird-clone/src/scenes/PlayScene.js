@@ -45,10 +45,6 @@ class PlayScene extends BaseScene {
 
     create() {
         this.initScene();
-        this.anims.create({
-            key : 'fly',
-            frames : this.anims.generateFrameNumbers('luffy', { start: 1, end: 4 })
-        });
         this.jumpSound = this.sound.add('jump', {volume: 0.3});
     }
 
@@ -205,6 +201,7 @@ class PlayScene extends BaseScene {
         this.createPause();
         this.createBackBtn();
         this.ListenToEvents();
+        this.startAnimation();
     }
 
     /**
@@ -220,6 +217,7 @@ class PlayScene extends BaseScene {
             
             console.log('game over');
             this.physics.pause();
+            this.luffy.anims.stop('fly');
             this.luffy.setTint(0xff0000);
 
             this.time.addEvent({
@@ -288,6 +286,18 @@ class PlayScene extends BaseScene {
         }
     }
     
+    startAnimation() {
+        this.anims.create({
+            key : 'fly',
+            frames : this.anims.generateFrameNumbers('luffy', { start: 0, end: 5 }),
+            // it will play animation consisting of 4 frames in 1 second
+            frameRate : 12,
+            // repeat infinite times
+            repeat : -1
+        });
+
+        this.luffy.play('fly');
+    }
 }
 
 export default PlayScene;
