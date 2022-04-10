@@ -41,17 +41,6 @@ class PlayScene extends BaseScene {
         this.recyclePipes();
     }
 
-    /* createBackBtn() {
-        const backBtn = this.add.image(this.config.width - 50, 50, 'back-btn')
-            .setOrigin(0, 1)
-            .setScale(2)
-            .setInteractive();
-
-        backBtn.on('pointerdown', () => {
-            this.scene.start('MenuScene');
-        });
-    } */
-
     createPause() {
         const pauseBtn = this.add.image(this.config.width - 10, this.config.height - 10, 'pause')
             .setOrigin(1)

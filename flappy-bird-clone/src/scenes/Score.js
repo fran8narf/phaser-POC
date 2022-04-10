@@ -3,7 +3,6 @@ import BaseScene from "./BaseScene";
 class ScoreScene extends BaseScene {
     constructor(config) {
         super('ScoreScene', config);
-        this.screenCenter = [config.width / 2, config.height / 2];
     }
 
     preload() {}
@@ -23,7 +22,8 @@ class ScoreScene extends BaseScene {
                 fontSize: '62px', fill: '#FFF', 
                 backgroundColor: 'rgba(0, 0, 0, 0.7)'
             },
-        ).setOrigin(.5, 1);
+        );
+        bestScoreText.setOrigin(.5, 1);
     }
 }
 
