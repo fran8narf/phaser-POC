@@ -11,8 +11,8 @@ class PlayScene extends BaseScene {
         this.VELOCITY = 350;
         this.PIPES_TO_RENDER = 5;
 
-        this.pipeVerticalDistanceRange = [170, 220];
-        this.pipeHorizontalDistanceRange = [350, 390];
+        /* this.pipeVerticalDistanceRange = [170, 220];
+        this.pipeHorizontalDistanceRange = [350, 390]; */
 
         this.score = 0;
         this.scoreText = '';
@@ -25,6 +25,22 @@ class PlayScene extends BaseScene {
         this.initialTime = 0;
         this.timeOutEvent = undefined;
         this.isPaused = false;
+
+        this.currentDifficulty = 'easy';
+        this.difficulties = {
+            'easy' : {
+                pipeVerticalDistanceRange : [320, 370],
+                pipeHorizontalDistanceRange : [430, 470]
+            },
+            'normal' : {
+                pipeVerticalDistanceRange : [220, 270],
+                pipeHorizontalDistanceRange : [390, 430]
+            },
+            'hard' : {
+                pipeVerticalDistanceRange : [170, 220],
+                pipeHorizontalDistanceRange : [350, 390]
+            }
+        };
     }
 
     create() {
@@ -218,10 +234,12 @@ class PlayScene extends BaseScene {
      * Place both upper and lower pipe randomly determined by the pipeVerticalDistanceRange and the pipeHorizontalDistanceRange
      */
     placePipe(uPipe, lPipe) {
+        const difficulty = this.difficulties[this.currentDifficulty];
+
         const rightMostX = this.getRightMostPipe();
-        const pipeVerticalDistance = Phaser.Math.Between(...this.pipeVerticalDistanceRange);
+        const pipeVerticalDistance = Phaser.Math.Between(...difficulty.pipeVerticalDistanceRange);
         const pipeVerticalPos = Phaser.Math.Between(0 + 30, this.config.height - 30 - pipeVerticalDistance);
-        const pipeHorizontalDistance = Phaser.Math.Between(...this.pipeHorizontalDistanceRange);
+        const pipeHorizontalDistance = Phaser.Math.Between(...difficulty.pipeHorizontalDistanceRange);
     
         uPipe.x = rightMostX + pipeHorizontalDistance;
         uPipe.y = pipeVerticalPos;
