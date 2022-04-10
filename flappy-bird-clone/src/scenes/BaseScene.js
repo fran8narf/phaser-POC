@@ -39,7 +39,7 @@ class BaseScene extends Phaser.Scene {
             .setScale(2)
             .setInteractive();
 
-        backBtn.on('pointerdown', () => {
+        backBtn.on('pointerup', () => {
             this.scene.start('MenuScene');
         });
     }
