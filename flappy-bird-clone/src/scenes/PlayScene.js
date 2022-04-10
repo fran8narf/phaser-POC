@@ -45,7 +45,10 @@ class PlayScene extends BaseScene {
 
     create() {
         this.initScene();
-        
+        this.anims.create({
+            key : 'fly',
+            frames : this.anims.generateFrameNumbers('luffy', { start: 1, end: 4 })
+        });
         this.jumpSound = this.sound.add('jump', {volume: 0.3});
     }
 
@@ -78,7 +81,7 @@ class PlayScene extends BaseScene {
     renderPlayer(){
         this.luffy = this.physics.add.sprite(this.config.startPosition.x, this.config.startPosition.y, 'luffy');
         this.luffy.body.gravity.y = 1100;
-        this.luffy.scale = 0.3;
+        this.luffy.scale = 1.5;
 
         this.luffy.setCollideWorldBounds(true);
     }
@@ -270,9 +273,19 @@ class PlayScene extends BaseScene {
                 if (tempPipes.length === 2) {
                     this.placePipe(...tempPipes);
                     this.increaseScore();
+                    this.increaseDifficulty();
                 }
             }
         });
+    }
+    
+    increaseDifficulty() {
+        if (this.score >= 1) {
+            this.currentDifficulty = 'normal';
+        }
+        if (this.score >= 10) {
+            this.currentDifficulty = 'hard';
+        }
     }
     
 }
